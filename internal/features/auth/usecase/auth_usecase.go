@@ -450,12 +450,12 @@ func (a *authUseCase) CreateSession(ctx context.Context, userID uuid.UUID, userA
 	ctx, span := tracing.Tracer("auth-usecase").Start(ctx, "CreateSession")
 	defer span.End()
 
-	accessToken, _, err := a.tokenMaker.CreateToken(email, userID, a.config.AccessTokenDuration)
+	accessToken, _, err := a.tokenMaker.CreateToken(email, userID, a.config.AccessTokenDuration, loginType)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create access token: %w", err)
 	}
 
-	refreshToken, payload, err := a.tokenMaker.CreateToken(email, userID, a.config.RefreshTokenDuration)
+	refreshToken, payload, err := a.tokenMaker.CreateToken(email, userID, a.config.RefreshTokenDuration, loginType)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create refresh token: %w", err)
 	}
@@ -556,12 +556,12 @@ func (a *authUseCase) RefreshToken(ctx context.Context, refreshToken, userAgent,
 		return nil, "", fmt.Errorf("failed to get user: %w", err)
 	}
 
-	accessToken, _, err := a.tokenMaker.CreateToken(user.Email, user.ID, a.config.AccessTokenDuration)
+	accessToken, _, err := a.tokenMaker.CreateToken(user.Email, user.ID, a.config.AccessTokenDuration, user.AccountType)
 	if err != nil {
 		return nil, "", fmt.Errorf("failed to create access token: %w", err)
 	}
 
-	newRefreshToken, _, err := a.tokenMaker.CreateToken(user.Email, user.ID, a.config.RefreshTokenDuration)
+	newRefreshToken, _, err := a.tokenMaker.CreateToken(user.Email, user.ID, a.config.RefreshTokenDuration, user.AccountType)
 	if err != nil {
 		return nil, "", fmt.Errorf("failed to create refresh token: %w", err)
 	}

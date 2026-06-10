@@ -11,15 +11,17 @@ type Payload struct {
 	UserID    uuid.UUID `json:"user_id"`
 	IssuedAt  time.Time `json:"issued_at"`
 	ExpiredAt time.Time `json:"expired_at"`
+	UserType  string    `json:"user_type"`
 }
 
-func NewPayload(email string, userID uuid.UUID, duration time.Duration) (*Payload, error) {
+func NewPayload(email string, userID uuid.UUID, duration time.Duration, userType string) (*Payload, error) {
 
 	payload := &Payload{
 		Email:     email,
 		UserID:    userID,
 		IssuedAt:  time.Now(),
 		ExpiredAt: time.Now().Add(duration),
+		UserType: userType,
 	}
 
 	return payload, nil

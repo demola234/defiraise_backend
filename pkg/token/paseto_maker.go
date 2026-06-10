@@ -33,8 +33,8 @@ func NewTokenMaker(symmetricKey string) (Maker, error) {
 	return maker, nil
 }
 
-func (maker *PasetoMaker) CreateToken(email string, userID uuid.UUID, duration time.Duration) (string, *Payload, error) {
-	payload, err := NewPayload(email, userID, duration)
+func (maker *PasetoMaker) CreateToken(email string, userID uuid.UUID, duration time.Duration, userType string) (string, *Payload, error) {
+	payload, err := NewPayload(email, userID, duration, userType)
 	if err != nil {
 		return "", payload, err
 	}
